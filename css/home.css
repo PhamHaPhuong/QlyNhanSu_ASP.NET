@@ -1,0 +1,262 @@
+﻿:root {
+    color1: #78A1EF;
+    color2: #D2E0FB;
+    color3: #CF1A2C;
+    color4: #EAB04D;
+    color5: #19C8A7;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dad:after {
+    content: "";
+    display: table;
+    width: 100%;
+    clear: both;
+}
+
+a {
+    text-decoration: none;
+}
+
+.son1 {
+    width: 20%;
+    float: left;
+    border: 1px solid #78A1EF;
+    background-color: #D2E0FB;
+}
+
+    .son1 .header {
+        padding: 5% 7%;
+        border-bottom: 1px solid #78A1EF;
+    }
+
+    .son1 .nav {
+        padding: 5% 5% 5% 0;
+        font-size: 20px;
+    }
+
+        .son1 .nav div {
+            padding: 7% 8%;
+        }
+
+            .son1 .nav div:hover {
+                border-top-right-radius: 30px;
+                border-bottom-right-radius: 30px;
+                background-color: #78A1EF;
+            }
+
+.chon {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    background-color: #78A1EF;
+}
+
+.son1 .nav a {
+    color: black;
+}
+
+.son1 i {
+    margin-right: 5px;
+}
+
+.son2 {
+    width: 79.765%;
+    float: right;
+    background-color: #D2E0FB;
+    border: 1px solid #78A1EF;
+}
+
+.search-container {
+    position: relative;
+    width: 300px;
+    margin: 28.45px 6%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 20px 10px 40px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 16px;
+}
+
+.search-container i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: black;
+}
+
+.son2 .header2 {
+    border-bottom: 1px solid #78A1EF;
+}
+
+.content .slider {
+    padding: 3%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    width: 100%;
+    clear: both;
+}
+
+.column {
+}
+
+.column1 {
+    width: 28%;
+    float: left;
+    margin-right: 5%;
+    border-left: 4px solid #78A1EF;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.column2 {
+    width: 28%;
+    margin-right: 5%;
+    border-left: 4px solid #CF1A2C;
+    border-radius: 15px;
+    float: left;
+    background-color: white;
+}
+
+.column3 {
+    width: 28%;
+    float: left;
+    border-left: 4px solid #EAB04D;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.client {
+    padding: 7% 0% 23% 5%;
+    display: inline-block;
+}
+
+.client1 {
+    width: 18%;
+    float: left;
+    margin-right: 2%;
+}
+
+.client2 {
+    width: 70%;
+    float: left;
+    margin-bottom: 30%;
+}
+
+.client1 img {
+    width: 100%;
+    height: auto;
+}
+
+.column::after {
+    content: "";
+    display: table;
+    width: 100%;
+    clear: both;
+}
+
+.column1 div {
+    padding: 5%;
+}
+
+.column2 div {
+    padding: 5%;
+}
+
+.column3 div {
+    padding: 5%;
+}
+
+#nhanvien {
+    color: cornflowerblue;
+}
+
+.thongke {
+    background-color: white;
+    padding: 5%;
+}
+.thaotac {
+    display: inline-block;
+}
+
+.search {
+    position: relative;
+    width: 100px;
+}
+
+.searchinput {
+    width: 100%;
+    padding: 10px 20px 10px 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 8px 8px rgba(0,0,0,0.1);
+    font-size: 16px;
+}
+
+.search i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: black;
+}
+
+.form {
+    padding: 3% 5%
+}
+
+#Print {
+    width: 80px;
+    height: 40px;
+    border: none;
+    background-color: #DBDADA;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+}
+
+.print-button {
+    padding-left: 30px;
+    background-image: url('https://path-to-your-print-icon.png');
+    background-repeat: no-repeat;
+    background-position: left center; /* Adjust icon position */
+    padding: 10px 20px; /* Adjust padding to suit your design */
+    text-align: center; /* Center text horizontally */
+}
+
+    .print-button::before {
+        content: url('https://path-to-your-print-icon.png');
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+#them {
+    width: 180px;
+    height: 40px;
+    border: none;
+    background-color: #F9F3CC;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+}
+
+.table {
+    margin: 3% 0;
+    padding: 2% 5%;
+    background-color: white;
+}
