@@ -16,11 +16,11 @@
             var txtSearch = document.getElementById('<%= txtSearch.ClientID %>').value;
             __doPostBack('txtSearch', txtSearch);
         }
-       
+
     </script>
     <style>
-        .thaotac{
-            display: inline-block;
+.thaotac{
+      display: inline-block;
         }
 .search {
     position: relative;
@@ -118,7 +118,7 @@
                     <div class="form">
                         <div class="thaotac"><h2>Danh sách kỷ luật</h2></div>
                         <div class="thaotac" style="float:right;">
-                            <asp:Button ID="them" runat="server" Text="Thêm kỷ luật" />
+                            <asp:Button ID="them" runat="server" Text="Thêm kỷ luật" OnClick="them_Click1" />
                         </div>
                         
                         <div class="table">
@@ -132,6 +132,7 @@
                                 
                                 <asp:Button ID="Print" runat="server" Text="In" CssClass="print-button" OnClientClick="printPage()" />
                             </div>
+
                             <div class="bang">
                                 <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False">
                                     <Columns>
@@ -141,7 +142,6 @@
                                         
                                          <asp:TemplateField HeaderText="Thao tác">
                                          <ItemTemplate>
-                                            <asp:ImageButton ID="btnEdit" runat="server" CommandName="EditRow" ImageUrl="~/Images/edit-icon.png" ToolTip="Edit" />
                                             <asp:ImageButton ID="btnDelete" runat="server" CommandName="DeleteRow" ImageUrl="~/Images/delete-icon.png" ToolTip="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" />
                                         </ItemTemplate>
                                         </asp:TemplateField>           

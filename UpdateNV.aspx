@@ -78,7 +78,7 @@
                         <asp:Label ID="Label7" CssClass="label" runat="server" Text="Địa chỉ"></asp:Label>
                     </div>
                     <div class="chau2">
-                        <asp:TextBox ID="txtMaNhanVien" CssClass="txt" runat="server"></asp:TextBox><br />
+                        <asp:DropDownList ID="ddlNhanVien" runat="server" CssClass="txt"></asp:DropDownList><br />
                         <asp:TextBox ID="txtHoTen" CssClass="txt" runat="server"></asp:TextBox><br />
                         <asp:TextBox ID="txtNgaySinh" CssClass="txt" runat="server"></asp:TextBox><br />
                         <asp:TextBox ID="txtGioiTinh" CssClass="txt" runat="server"></asp:TextBox><br />

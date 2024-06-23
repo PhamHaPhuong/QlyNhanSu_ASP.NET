@@ -30,6 +30,7 @@
                     <asp:BoundField DataField="TenPhongBan" HeaderText="Tên Phòng Ban" />
                 </Columns>
             </asp:GridView>
+            <asp:Label ID="lblMessage" runat="server" ForeColor="Red" />
         </div>
     </form>
 </body>

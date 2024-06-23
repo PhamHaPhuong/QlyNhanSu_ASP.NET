@@ -27,6 +27,7 @@
                     <asp:BoundField DataField="TenChucVu" HeaderText="Tên Chức Vụ" />
                 </Columns>
             </asp:GridView>
+             <asp:Label ID="lblMessage" runat="server" ForeColor="Red" />
         </div>
     </form>
 </body>

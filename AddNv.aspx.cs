@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.OleDb;
 using System.Web.UI.WebControls;
 
@@ -11,6 +12,23 @@ namespace BaiTapLon_QlyNhanSu
             if (!IsPostBack)
             {
                 LoadDropDownLists();
+                LoadGridView();
+            }
+        }
+
+        private void LoadGridView()
+        {
+            string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Admin\source\repos\BaiTapLon_QlyNhanSu\QUANLYNHANSU.accdb";
+            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            {
+                string query = "SELECT * FROM [Nhân Viên]";
+                using (OleDbDataAdapter da = new OleDbDataAdapter(query, conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+                }
             }
         }
 
@@ -139,13 +157,16 @@ namespace BaiTapLon_QlyNhanSu
                         {
                             lblMessage.Text = "Thêm nhân viên thành công.";
                             lblMessage.ForeColor = System.Drawing.Color.Green;
-                           
+
+                            // Load lại GridView để hiển thị nhân viên mới thêm
+                            // LoadGridView();
                         }
                         else
                         {
                             lblMessage.Text = "Thêm nhân viên thất bại.";
                             lblMessage.ForeColor = System.Drawing.Color.Red;
                         }
+                        LoadGridView();
                     }
                 }
                 catch (Exception ex)
@@ -155,9 +176,5 @@ namespace BaiTapLon_QlyNhanSu
                 }
             }
         }
-
     }
-
 }
-
-

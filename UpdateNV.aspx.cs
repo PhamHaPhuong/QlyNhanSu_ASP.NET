@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Data;
+using System.Configuration;
 using System.Data.OleDb;
 using System.Web.UI.WebControls;
 
@@ -8,205 +8,214 @@ namespace BaiTapLon_QlyNhanSu
 {
     public partial class UpdateNV : System.Web.UI.Page
     {
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Admin\source\repos\BaiTapLon_QlyNhanSu\QUANLYNHANSU.accdb";
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!Page.IsPostBack)
             {
+                BindNhanVienDropDownList();
+                BindDropDownLists();
                 BindGridView();
-                PopulateDropDownLists();
             }
         }
 
-        // Hàm để hiển thị dữ liệu từ bảng Nhân Viên lên GridView
+        private void BindNhanVienDropDownList()
+        {
+            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            {
+                string query = "SELECT MaNhanVien, HoTen FROM [Nhân Viên]";
+                OleDbDataAdapter da = new OleDbDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                ddlNhanVien.DataSource = dt;
+                ddlNhanVien.DataTextField = "HoTen";
+                ddlNhanVien.DataValueField = "MaNhanVien";
+                ddlNhanVien.DataBind();
+            }
+        }
+
         private void BindGridView()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
-                string query = "SELECT * FROM [Nhân Viên]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, conn))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    GridView1.DataSource = dt;
-                    GridView1.DataBind();
-                }
+                string query = "SELECT MaNhanVien, HoTen, NgaySinh, GioiTinh, CCCD, DiaChi, SDT, IDChucVu, MaPhongBan, IDTrinhDo, IDDanToc, IDTonGiao FROM [Nhân Viên]";
+                OleDbDataAdapter da = new OleDbDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
             }
         }
 
-        // Hàm để điền dữ liệu vào các DropDownList
-        private void PopulateDropDownLists()
+        private void BindDropDownLists()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
-                // Đổ dữ liệu cho DropDownList Chức vụ
-                string queryChucVu = "SELECT * FROM [Chức vụ]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(queryChucVu, conn))
+                conn.Open();
+                try
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    ddlChucVu.DataSource = dt;
-                    ddlChucVu.DataTextField = "TenChucVu"; // Tên trường chứa dữ liệu hiển thị
-                    ddlChucVu.DataValueField = "IDChucVu"; // Tên trường chứa giá trị của mục
+                    // Chức vụ
+                    string chucVuQuery = "SELECT IDChucVu, TenChucVu FROM [Chức Vụ]";
+                    OleDbDataAdapter chucVuDa = new OleDbDataAdapter(chucVuQuery, conn);
+                    DataTable chucVuDt = new DataTable();
+                    chucVuDa.Fill(chucVuDt);
+                    ddlChucVu.DataSource = chucVuDt;
+                    ddlChucVu.DataTextField = "TenChucVu";
+                    ddlChucVu.DataValueField = "IDChucVu";
                     ddlChucVu.DataBind();
                 }
-
-                // Đổ dữ liệu cho DropDownList Phòng ban
-                string queryPhongBan = "SELECT * FROM [Phòng ban]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(queryPhongBan, conn))
+                catch (Exception ex)
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    ddlPhongBan.DataSource = dt;
+                    // Log lỗi hoặc xử lý lỗi
+                    Console.WriteLine("Lỗi tại Chức vụ: " + ex.Message);
+                }
+
+                try
+                {
+                    // Phòng ban
+                    string phongBanQuery = "SELECT MaPhongBan, TenPhongBan FROM [Phòng Ban]";
+                    OleDbDataAdapter phongBanDa = new OleDbDataAdapter(phongBanQuery, conn);
+                    DataTable phongBanDt = new DataTable();
+                    phongBanDa.Fill(phongBanDt);
+                    ddlPhongBan.DataSource = phongBanDt;
                     ddlPhongBan.DataTextField = "TenPhongBan";
                     ddlPhongBan.DataValueField = "MaPhongBan";
                     ddlPhongBan.DataBind();
                 }
-
-                // Đổ dữ liệu cho DropDownList Trình độ
-                string queryTrinhDo = "SELECT * FROM [Trình độ]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(queryTrinhDo, conn))
+                catch (Exception ex)
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    ddlTrinhDo.DataSource = dt;
-                    ddlTrinhDo.DataTextField = "TenTrinhDo";
+                    // Log lỗi hoặc xử lý lỗi
+                    Console.WriteLine("Lỗi tại Phòng ban: " + ex.Message);
+                }
+
+                try
+                {
+                    // Trình độ
+                    string trinhDoQuery = "SELECT IDTrinhDo, TrinhDo FROM [Học Vấn]";
+                    OleDbDataAdapter trinhDoDa = new OleDbDataAdapter(trinhDoQuery, conn);
+                    DataTable trinhDoDt = new DataTable();
+                    trinhDoDa.Fill(trinhDoDt);
+                    ddlTrinhDo.DataSource = trinhDoDt;
+                    ddlTrinhDo.DataTextField = "TrinhDo";
                     ddlTrinhDo.DataValueField = "IDTrinhDo";
                     ddlTrinhDo.DataBind();
                 }
-
-                // Đổ dữ liệu cho DropDownList Dân tộc
-                string queryDanToc = "SELECT * FROM [Dân tộc]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(queryDanToc, conn))
+                catch (Exception ex)
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    ddlDanToc.DataSource = dt;
+                    // Log lỗi hoặc xử lý lỗi
+                    Console.WriteLine("Lỗi tại Trình độ: " + ex.Message);
+                }
+
+                try
+                {
+                    // Dân tộc
+                    string danTocQuery = "SELECT IDDanToc, TenDanToc FROM [Dân Tộc]";
+                    OleDbDataAdapter danTocDa = new OleDbDataAdapter(danTocQuery, conn);
+                    DataTable danTocDt = new DataTable();
+                    danTocDa.Fill(danTocDt);
+                    ddlDanToc.DataSource = danTocDt;
                     ddlDanToc.DataTextField = "TenDanToc";
                     ddlDanToc.DataValueField = "IDDanToc";
                     ddlDanToc.DataBind();
                 }
-
-                // Đổ dữ liệu cho DropDownList Tôn giáo
-                string queryTonGiao = "SELECT * FROM [Tôn giáo]";
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(queryTonGiao, conn))
+                catch (Exception ex)
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    ddlTonGiao.DataSource = dt;
+                    // Log lỗi hoặc xử lý lỗi
+                    Console.WriteLine("Lỗi tại Dân tộc: " + ex.Message);
+                }
+
+                try
+                {
+                    // Tôn giáo
+                    string tonGiaoQuery = "SELECT IDTonGiao, TenTonGiao FROM [Tôn Giáo]";
+                    OleDbDataAdapter tonGiaoDa = new OleDbDataAdapter(tonGiaoQuery, conn);
+                    DataTable tonGiaoDt = new DataTable();
+                    tonGiaoDa.Fill(tonGiaoDt);
+                    ddlTonGiao.DataSource = tonGiaoDt;
                     ddlTonGiao.DataTextField = "TenTonGiao";
                     ddlTonGiao.DataValueField = "IDTonGiao";
                     ddlTonGiao.DataBind();
                 }
-            }
-        }
-
-        // Sự kiện khi người dùng chọn một dòng trong GridView
-        protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            GridViewRow row = GridView1.SelectedRow;
-            if (row != null)
-            {
-                txtMaNhanVien.Text = row.Cells[1].Text; // Thay thế 1 bằng chỉ số của cột MaNhanVien trong GridView
-                txtHoTen.Text = row.Cells[2].Text; // Thay thế 2 bằng chỉ số của cột HoTen trong GridView
-                txtNgaySinh.Text = row.Cells[3].Text; // Thay thế 3 bằng chỉ số của cột NgaySinh trong GridView
-                txtGioiTinh.Text = row.Cells[4].Text; // Thay thế 4 bằng chỉ số của cột GioiTinh trong GridView
-                txtCCCD.Text = row.Cells[5].Text; // Thay thế 5 bằng chỉ số của cột CCCD trong GridView
-                txtDiaChi.Text = row.Cells[6].Text; // Thay thế 6 bằng chỉ số của cột DiaChi trong GridView
-                txtSDT.Text = row.Cells[7].Text; // Thay thế 7 bằng chỉ số của cột SDT trong GridView
-
-                // Chọn giá trị của các DropDownList tương ứng với dòng đã chọn trong GridView
-                ddlChucVu.SelectedValue = row.Cells[8].Text; // Thay thế 8 bằng chỉ số của cột IDChucVu trong GridView
-                ddlPhongBan.SelectedValue = row.Cells[9].Text; // Thay thế 9 bằng chỉ số của cột MaPhongBan trong GridView
-                ddlTrinhDo.SelectedValue = row.Cells[10].Text; // Thay thế 10 bằng chỉ số của cột IDTrinhDo trong GridView
-                ddlDanToc.SelectedValue = row.Cells[11].Text; // Thay thế 11 bằng chỉ số của cột IDDanToc trong GridView
-                ddlTonGiao.SelectedValue = row.Cells[12].Text; // Thay thế 12 bằng chỉ số của cột IDTonGiao trong GridView
-            }
-        }
-
-        // Sự kiện khi người dùng nhấn nút "Sửa"
-        protected void btn_Sua_Click(object sender, EventArgs e)
-        {
-            string maNhanVien = txtMaNhanVien.Text;
-            string hoTen = txtHoTen.Text;
-            string ngaySinh = txtNgaySinh.Text;
-            string gioiTinh = txtGioiTinh.Text;
-            string cccd = txtCCCD.Text;
-            string diaChi = txtDiaChi.Text;
-            string sdt = txtSDT.Text;
-            string idChucVu = ddlChucVu.SelectedValue;
-            string maPhongBan = ddlPhongBan.SelectedValue;
-            string idTrinhDo = ddlTrinhDo.SelectedValue;
-            string idDanToc = ddlDanToc.SelectedValue;
-            string idTonGiao = ddlTonGiao.SelectedValue;
-
-            // Cập nhật dữ liệu vào cơ sở dữ liệu
-            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
-            {
-                string updateQuery = @"
-                    UPDATE [Nhân Viên] 
-                    SET HoTen = @HoTen, NgaySinh = @NgaySinh, GioiTinh = @GioiTinh, CCCD = @CCCD, DiaChi = @DiaChi, SDT = @SDT, 
-                        IDChucVu = @IDChucVu, MaPhongBan = @MaPhongBan, IDTrinhDo = @IDTrinhDo, IDDanToc = @IDDanToc, IDTonGiao = @IDTonGiao 
-                    WHERE MaNhanVien = @MaNhanVien";
-
-                using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+                catch (Exception ex)
                 {
-                    cmd.Parameters.AddWithValue("@HoTen", hoTen);
-                    cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
-                    cmd.Parameters.AddWithValue("@GioiTinh", gioiTinh);
-                    cmd.Parameters.AddWithValue("@CCCD", cccd);
-                    cmd.Parameters.AddWithValue("@DiaChi", diaChi);
-                    cmd.Parameters.AddWithValue("@SDT", sdt);
-                    cmd.Parameters.AddWithValue("@IDChucVu", idChucVu);
-                    cmd.Parameters.AddWithValue("@MaPhongBan", maPhongBan);
-                    cmd.Parameters.AddWithValue("@IDTrinhDo", idTrinhDo);
-                    cmd.Parameters.AddWithValue("@IDDanToc", idDanToc);
-                    cmd.Parameters.AddWithValue("@IDTonGiao", idTonGiao);
-                    cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
-
-                    conn.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    conn.Close();
-
-                    if (rowsAffected > 0)
-                    {
-                        // Hiển thị thông báo thành công
-                        lblMessage.Text = "Cập nhật nhân viên thành công.";
-                        lblMessage.ForeColor = System.Drawing.Color.Green;
-
-                        // Sau khi cập nhật thành công, làm mới GridView và các TextBox, DropDownList
-                        BindGridView();
-                        ClearFields();
-                    }
-                    else
-                    {
-                        // Hiển thị thông báo lỗi
-                        lblMessage.Text = "Cập nhật nhân viên thất bại.";
-                        lblMessage.ForeColor = System.Drawing.Color.Red;
-                    }
+                    // Log lỗi hoặc xử lý lỗi
+                    Console.WriteLine("Lỗi tại Tôn giáo: " + ex.Message);
                 }
             }
         }
 
-        // Hàm để xóa nội dung các TextBox và DropDownList sau khi cập nhật thành công
-        private void ClearFields()
+        protected void btn_Sua_Click(object sender, EventArgs e)
         {
-            txtMaNhanVien.Text = string.Empty;
-            txtHoTen.Text = string.Empty;
-            txtNgaySinh.Text = string.Empty;
-            txtGioiTinh.Text = string.Empty;
-            txtCCCD.Text = string.Empty;
-            txtDiaChi.Text = string.Empty;
-            txtSDT.Text = string.Empty;
+            try
+            {
+                if (ddlNhanVien.SelectedValue != "")
+                {
+                    using (OleDbConnection conn = new OleDbConnection(connectionString))
+                    {
+                        conn.Open();
+                        string sql = "UPDATE [Nhân Viên] SET HoTen = ?, NgaySinh = ?, GioiTinh = ?, CCCD = ?, DiaChi = ?, SDT = ?, IDChucVu = ?, MaPhongBan = ?, IDTrinhDo = ?, IDDanToc = ?, IDTonGiao = ? WHERE MaNhanVien = ?";
+                        using (OleDbCommand cmd = new OleDbCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@HoTen", txtHoTen.Text);
+                            cmd.Parameters.AddWithValue("@NgaySinh", txtNgaySinh.Text);
+                            cmd.Parameters.AddWithValue("@GioiTinh", txtGioiTinh.Text);
+                            cmd.Parameters.AddWithValue("@CCCD", txtCCCD.Text);
+                            cmd.Parameters.AddWithValue("@DiaChi", txtDiaChi.Text);
+                            cmd.Parameters.AddWithValue("@SDT", txtSDT.Text);
+                            cmd.Parameters.AddWithValue("@IDChucVu", ddlChucVu.SelectedValue);
+                            cmd.Parameters.AddWithValue("@MaPhongBan", ddlPhongBan.SelectedValue);
+                            cmd.Parameters.AddWithValue("@IDTrinhDo", ddlTrinhDo.SelectedValue);
+                            cmd.Parameters.AddWithValue("@IDDanToc", ddlDanToc.SelectedValue);
+                            cmd.Parameters.AddWithValue("@IDTonGiao", ddlTonGiao.SelectedValue);
+                            cmd.Parameters.AddWithValue("@MaNhanVien", ddlNhanVien.SelectedValue);
 
-            // Đặt lại SelectedIndex cho các DropDownList
-            ddlChucVu.SelectedIndex = 0;
-            ddlPhongBan.SelectedIndex = 0;
-            ddlTrinhDo.SelectedIndex = 0;
-            ddlDanToc.SelectedIndex = 0;
-            ddlTonGiao.SelectedIndex = 0;
+                            int affectedRows = cmd.ExecuteNonQuery();
+
+                            if (affectedRows > 0)
+                            {
+                                BindGridView(); // Refresh lại GridView sau khi cập nhật thành công
+                                lblMessage.Text = "Cập nhật thành công";
+                                lblMessage.ForeColor = System.Drawing.Color.Green;
+                            }
+                            else
+                            {
+                                lblMessage.Text = "Cập nhật thất bại";
+                                lblMessage.ForeColor = System.Drawing.Color.Red;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    lblMessage.Text = "Vui lòng chọn nhân viên để cập nhật";
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Lỗi: " + ex.Message;
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+            }
+        }
+
+        protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GridViewRow row = GridView1.SelectedRow;
+            ddlNhanVien.SelectedValue = row.Cells[0].Text;
+            txtHoTen.Text = row.Cells[1].Text;
+            txtNgaySinh.Text = row.Cells[2].Text;
+            txtGioiTinh.Text = row.Cells[3].Text;
+            txtCCCD.Text = row.Cells[4].Text;
+            txtDiaChi.Text = row.Cells[5].Text;
+            txtSDT.Text = row.Cells[6].Text;
+            ddlChucVu.SelectedValue = row.Cells[7].Text;
+            ddlPhongBan.SelectedValue = row.Cells[8].Text;
+            ddlTrinhDo.SelectedValue = row.Cells[9].Text;
+            ddlDanToc.SelectedValue = row.Cells[10].Text;
+            ddlTonGiao.SelectedValue = row.Cells[11].Text;
         }
     }
 }

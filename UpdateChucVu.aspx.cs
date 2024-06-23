@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -16,14 +13,11 @@ namespace BaiTapLon_QlyNhanSu
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             conn.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Admin\source\repos\BaiTapLon_QlyNhanSu\QUANLYNHANSU.accdb";
             conn.Open();
             if (!Page.IsPostBack)
             {
-
-
-                String SQL = string.Format("SELECT * from [Chức Vụ]");
+                String SQL = "SELECT * FROM [Chức Vụ]";
                 OleDbDataAdapter ad = new OleDbDataAdapter(SQL, conn);
                 DataTable dt = new DataTable();
                 ad.Fill(dt);
@@ -38,16 +32,14 @@ namespace BaiTapLon_QlyNhanSu
             }
         }
 
-
-
         protected void btn_Them_Click(object sender, EventArgs e)
         {
-
+            // Chưa có nội dung
         }
 
         protected void Unnamed4_Click(object sender, EventArgs e)
         {
-
+            lblMessage.Text = ""; // Clear previous messages
             try
             {
                 if (txtTen.Text.Length > 0)
@@ -71,34 +63,32 @@ namespace BaiTapLon_QlyNhanSu
                             GridView_1.DataSource = dt;
                             GridView_1.DataBind();
 
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                                "alert('Cập nhật thành công');", true);
+                            lblMessage.Text = "Cập nhật thành công";
+                            lblMessage.ForeColor = System.Drawing.Color.Green;
                         }
                         else
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                                "alert('Cập nhật thất bại');", true);
+                            lblMessage.Text = "Cập nhật thất bại";
+                            lblMessage.ForeColor = System.Drawing.Color.Red;
                         }
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                        "alert('Tên chức vụ không được để trống');", true);
+                    lblMessage.Text = "Tên chức vụ không được để trống";
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                    "alert('Lỗi: " + ex.Message + "');", true);
+                lblMessage.Text = "Lỗi: " + ex.Message;
+                lblMessage.ForeColor = System.Drawing.Color.Red;
             }
             finally
             {
                 conn.Close();
             }
         }
-
-
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -110,14 +100,7 @@ namespace BaiTapLon_QlyNhanSu
             if (dt.Rows.Count > 0)
             {
                 txtTen.Text = dt.Rows[0]["TenChucVu"].ToString();
-
             }
-
         }
-
     }
 }
-
-
-
-

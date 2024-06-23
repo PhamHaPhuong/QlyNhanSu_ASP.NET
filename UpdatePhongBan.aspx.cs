@@ -7,108 +7,99 @@ namespace BaiTapLon_QlyNhanSu
 {
     public partial class UpdatePhongBan : System.Web.UI.Page
     {
-        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Admin\source\repos\BaiTapLon_QlyNhanSu\QUANLYNHANSU.accdb";
-
+       
+        String sql;
+        OleDbConnection conn = new OleDbConnection();
         protected void Page_Load(object sender, EventArgs e)
         {
+            conn.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Admin\source\repos\BaiTapLon_QlyNhanSu\QUANLYNHANSU.accdb";
+            conn.Open();
             if (!Page.IsPostBack)
             {
-                BindDropDownList(); // Load dữ liệu vào DropDownList khi trang chưa PostBack
-                BindGridView(); // Load dữ liệu vào GridView
-            }
-        }
-
-        protected void BindDropDownList()
-        {
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
-            {
-                string query = "SELECT MaPhongBan, TenPhongBan FROM [Phòng Ban]";
-                OleDbDataAdapter da = new OleDbDataAdapter(query, conn);
+                String SQL = "SELECT * FROM [Phòng Ban]";
+                OleDbDataAdapter ad = new OleDbDataAdapter(SQL, conn);
                 DataTable dt = new DataTable();
-                da.Fill(dt);
+                ad.Fill(dt);
 
                 DropDownList1.DataSource = dt;
                 DropDownList1.DataTextField = "TenPhongBan";
                 DropDownList1.DataValueField = "MaPhongBan";
                 DropDownList1.DataBind();
-            }
-        }
-
-        protected void BindGridView()
-        {
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
-            {
-                string query = "SELECT MaPhongBan, TenPhongBan FROM [Phòng Ban]";
-                OleDbDataAdapter da = new OleDbDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
 
                 GridView_2.DataSource = dt;
                 GridView_2.DataBind();
             }
         }
 
+        
         protected void Unnamed4_Click(object sender, EventArgs e)
         {
+            lblMessage.Text = ""; // Clear previous messages
             try
             {
-                if (!string.IsNullOrEmpty(txtTen.Text) && DropDownList1.SelectedValue != "")
+                if (txtTen.Text.Length > 0)
                 {
-                    using (OleDbConnection conn = new OleDbConnection(connectionString))
+                    sql = "UPDATE [Phòng Ban] SET TenPhongBan = @TenPhongBan WHERE MaPhongBan = @MaPhongBan";
+
+                    using (OleDbCommand cmd = new OleDbCommand(sql, conn))
                     {
-                        conn.Open();
-                        string sql = "UPDATE [Phòng Ban] SET TenPhongBan = ? WHERE MaPhongBan = ?";
-                        using (OleDbCommand cmd = new OleDbCommand(sql, conn))
+                        cmd.Parameters.AddWithValue("@TenPhongBan", txtTen.Text);
+                        cmd.Parameters.AddWithValue("@MaPhongBan", DropDownList1.SelectedValue);
+
+                        int affectedRows = cmd.ExecuteNonQuery();
+
+                        if (affectedRows > 0)
                         {
-                            cmd.Parameters.AddWithValue("@p1", txtTen.Text);
-                            cmd.Parameters.AddWithValue("@p2", DropDownList1.SelectedValue);
+                            string SQL = "SELECT * FROM [Phòng Ban]";
+                            OleDbDataAdapter ad = new OleDbDataAdapter(SQL, conn);
+                            DataTable dt = new DataTable();
+                            ad.Fill(dt);
 
-                            int affectedRows = cmd.ExecuteNonQuery();
+                            GridView_2.DataSource = dt;
+                            GridView_2.DataBind();
 
-                            if (affectedRows > 0)
-                            {
-                                BindGridView(); // Refresh lại GridView sau khi cập nhật thành công
-
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                                    "alert('Cập nhật thành công');", true);
-                            }
-                            else
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                                    "alert('Cập nhật thất bại');", true);
-                            }
+                            lblMessage.Text = "Cập nhật thành công";
+                            lblMessage.ForeColor = System.Drawing.Color.Green;
+                        }
+                        else
+                        {
+                            lblMessage.Text = "Cập nhật thất bại";
+                            lblMessage.ForeColor = System.Drawing.Color.Red;
                         }
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                        "alert('Tên phòng ban không được để trống và phải chọn một phòng ban để cập nhật');", true);
+                    lblMessage.Text = "Tên phòng ban không được để trống";
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "ShowMessage",
-                    "alert('Lỗi: " + ex.Message + "');", true);
+                lblMessage.Text = "Lỗi: " + ex.Message;
+                lblMessage.ForeColor = System.Drawing.Color.Red;
             }
+            finally
+            {
+                conn.Close();
+            }
+
         }
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
-            {
-                string query = "SELECT TenPhongBan FROM [Phòng Ban] WHERE MaPhongBan = ?";
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+           
+            
+                string sql1 = string.Format(@"select * from [Phòng Ban] where MaPhongBan = '{0}'", DropDownList1.SelectedValue);
+                OleDbDataAdapter ad = new OleDbDataAdapter(sql1, conn);
+                DataTable dt = new DataTable();
+                ad.Fill(dt);
+
+                if (dt.Rows.Count > 0)
                 {
-                    cmd.Parameters.AddWithValue("@p1", DropDownList1.SelectedValue);
-                    conn.Open();
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        txtTen.Text = result.ToString();
-                    }
+                    txtTen.Text = dt.Rows[0]["TenPhongBan"].ToString();
                 }
-            }
+            
         }
     }
 }
